@@ -30,9 +30,15 @@
                    CONFIG.turnstileSiteKey.indexOf('TURNSTILE_SITE_KEY') === -1;
 
   /* ---------- Turnstile (loaded only when the modal is first opened) ---------- */
+  // Check for the real API, not just a global named "turnstile": browsers expose any element
+  // with id="turnstile" as window.turnstile, which once fooled this into skipping the load.
+  function turnstileReady() {
+    return !!(window.turnstile && typeof window.turnstile.render === 'function');
+  }
+
   function renderTurnstile() {
-    if (turnstileId !== null || !window.turnstile || !configured) return;
-    turnstileId = window.turnstile.render('#turnstile', {
+    if (turnstileId !== null || !turnstileReady() || !configured) return;
+    turnstileId = window.turnstile.render('#cf-turnstile-slot', {
       sitekey: CONFIG.turnstileSiteKey,
       theme: 'dark',
       size: 'flexible'
@@ -41,7 +47,7 @@
 
   function loadTurnstile() {
     if (!configured) return;
-    if (window.turnstile) { renderTurnstile(); return; }
+    if (turnstileReady()) { renderTurnstile(); return; }
     if (document.getElementById('cf-turnstile-script')) return;
     window.dmTurnstileReady = renderTurnstile;
     var s = document.createElement('script');
@@ -53,7 +59,7 @@
   }
 
   function resetTurnstile() {
-    if (window.turnstile && turnstileId !== null) window.turnstile.reset(turnstileId);
+    if (turnstileReady() && turnstileId !== null) window.turnstile.reset(turnstileId);
   }
 
   /* ---------- Open / close with the summon + dismiss animations ---------- */
