@@ -936,6 +936,32 @@ html:has(.contact-modal[open]) { overflow: hidden; }
   .mote, .horizon-mist, .tower-window, .tower-glow { animation: none; }
 }
 
+/* =====================================================================
+   Wand cursor
+   A pixel-art wooden wand everywhere; its tip glows with mana sparkles over
+   anything clickable. The hotspot (2 1) is the wand tip. Each rule repeats
+   the cursor so older browsers fall back to the plain image, then the arrow.
+   ===================================================================== */
+html,
+.contact-modal::backdrop,
+input,
+textarea {
+  cursor: url("assets/cursor-wand.png") 2 1, auto;
+  cursor: -webkit-image-set(url("assets/cursor-wand.png") 1x, url("assets/cursor-wand@2x.png") 2x) 2 1, auto;
+  cursor: image-set(url("assets/cursor-wand.png") 1x, url("assets/cursor-wand@2x.png") 2x) 2 1, auto;
+}
+a,
+button,
+summary,
+.nav-menu summary,
+.btn,
+.modal-close,
+label[for] {
+  cursor: url("assets/cursor-wand-glow.png") 2 1, pointer;
+  cursor: -webkit-image-set(url("assets/cursor-wand-glow.png") 1x, url("assets/cursor-wand-glow@2x.png") 2x) 2 1, pointer;
+  cursor: image-set(url("assets/cursor-wand-glow.png") 1x, url("assets/cursor-wand-glow@2x.png") 2x) 2 1, pointer;
+}
+
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
