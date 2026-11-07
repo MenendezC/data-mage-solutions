@@ -39,9 +39,9 @@
 <!-- One starfield behind the whole page: three depth layers that drift at
      different speeds as you scroll, plus constellations that draw themselves -->
 <div class="starfield" aria-hidden="true">
-  <div class="star-layer" data-depth="0.04"><div class="field field-b"></div><div class="field field-b field-copy"></div></div>
-  <div class="star-layer" data-depth="0.1"><div class="field field-a"></div><div class="field field-a field-copy"></div></div>
-  <div class="star-layer" data-depth="0.2"><div class="field field-c"></div><div class="field field-c field-copy"></div></div>
+  <div class="star-layer layer-far" data-depth="0.04"><div class="field field-b"></div><div class="field field-b field-copy"></div></div>
+  <div class="star-layer layer-mid" data-depth="0.1"><div class="field field-a"></div><div class="field field-a field-copy"></div></div>
+  <div class="star-layer layer-near" data-depth="0.2"><div class="field field-c"></div><div class="field field-c field-copy"></div></div>
   <svg class="constellation constellation-chart" viewBox="0 0 200 120" width="190" height="114">
     <path pathLength="1" d="M10 100 L55 78 L95 88 L140 45 L190 18"/>
     <g><rect x="8" y="98" width="4" height="4"/><rect x="53" y="76" width="4" height="4"/><rect x="93" y="86" width="4" height="4"/><rect x="138" y="43" width="4" height="4"/><rect x="187" y="15" width="6" height="6"/></g>
@@ -51,6 +51,27 @@
     <path pathLength="1" d="M100 100 L148 54"/>
     <g><rect x="18" y="98" width="4" height="4"/><rect x="41" y="41" width="4" height="4"/><rect x="98" y="18" width="4" height="4"/><rect x="155" y="41" width="4" height="4"/><rect x="178" y="98" width="4" height="4"/><rect x="97" y="97" width="6" height="6"/><rect x="146" y="52" width="4" height="4"/></g>
   </svg>
+</div>
+
+<!-- Foreground motes: soft specks of light drifting in front of the page.
+     Two identical sets so they can wrap seamlessly as you scroll. -->
+<div class="motes" aria-hidden="true">
+  <div class="mote-set">
+    <span class="mote" style="--x:8%; --y:22%; --s:22px; --dx:5vw; --dy:-6vh; --d:48s; --o:.22"></span>
+    <span class="mote mote-blue" style="--x:86%; --y:14%; --s:14px; --dx:-4vw; --dy:5vh; --d:56s; --o:.24"></span>
+    <span class="mote" style="--x:64%; --y:58%; --s:30px; --dx:-6vw; --dy:-5vh; --d:62s; --o:.16"></span>
+    <span class="mote mote-blue" style="--x:24%; --y:78%; --s:18px; --dx:4vw; --dy:-7vh; --d:52s; --o:.2"></span>
+    <span class="mote" style="--x:92%; --y:70%; --s:12px; --dx:-3vw; --dy:-4vh; --d:44s; --o:.26"></span>
+    <span class="mote mote-blue" style="--x:44%; --y:6%; --s:16px; --dx:5vw; --dy:4vh; --d:58s; --o:.18"></span>
+  </div>
+  <div class="mote-set mote-set-copy">
+    <span class="mote" style="--x:8%; --y:22%; --s:22px; --dx:5vw; --dy:-6vh; --d:48s; --o:.22"></span>
+    <span class="mote mote-blue" style="--x:86%; --y:14%; --s:14px; --dx:-4vw; --dy:5vh; --d:56s; --o:.24"></span>
+    <span class="mote" style="--x:64%; --y:58%; --s:30px; --dx:-6vw; --dy:-5vh; --d:62s; --o:.16"></span>
+    <span class="mote mote-blue" style="--x:24%; --y:78%; --s:18px; --dx:4vw; --dy:-7vh; --d:52s; --o:.2"></span>
+    <span class="mote" style="--x:92%; --y:70%; --s:12px; --dx:-3vw; --dy:-4vh; --d:44s; --o:.26"></span>
+    <span class="mote mote-blue" style="--x:44%; --y:6%; --s:16px; --dx:5vw; --dy:4vh; --d:58s; --o:.18"></span>
+  </div>
 </div>
 
 <header class="site-header">
@@ -243,6 +264,15 @@
     <div class="rise" style="left:36%; animation-delay:-8s; animation-duration:12s"></div>
     <div class="rise" style="left:64%; animation-delay:-1s; animation-duration:11s"></div>
     <div class="rise" style="left:82%; animation-delay:-6s"></div>
+  </div>
+  <!-- Pixel horizon: far mountains, mist, hills with a wizard's tower, mist, near pines.
+       Each layer lags the scroll by its own amount (data-speed) for depth. -->
+  <div class="horizon" aria-hidden="true">
+    <svg class="horizon-layer h-far" data-speed="0.45" data-mouse="4" viewBox="0 0 320 40" preserveAspectRatio="xMidYMax slice"><path d="M0 40V17H2V16H5V15H11V16H14V17H16V18H18V19H19V20H21V21H24V20H27V19H29V18H30V17H32V16H33V15H35V14H37V13H39V12H42V11H45V12H49V13H51V14H54V15H57V16H74V17H76V18H81V19H86V20H95V19H99V18H103V17H108V18H111V19H113V20H114V21H116V22H117V23H118V24H120V25H121V26H131V25H133V24H134V23H136V22H137V21H138V20H140V19H143V18H159V17H162V16H165V15H167V14H171V13H174V14H178V15H180V16H182V17H183V18H185V19H187V20H190V19H193V18H195V17H196V16H198V15H200V14H202V13H204V12H212V13H215V14H217V15H219V16H222V17H227V18H239V19H242V20H245V21H249V22H254V23H259V22H264V21H267V20H280V21H283V22H286V23H297V22H299V21H300V20H301V19H303V18H304V17H307V16H320V40Z"/></svg>
+    <div class="horizon-mist-wrap mist-high" data-speed="0.36" data-mouse="6"><div class="horizon-mist"></div></div>
+    <svg class="horizon-layer h-mid" data-speed="0.26" data-mouse="9" viewBox="0 0 320 40" preserveAspectRatio="xMidYMax slice"><path d="M0 40V27H18V28H24V29H28V30H32V31H36V32H40V33H44V34H50V35H67V34H76V33H105V34H114V35H130V34H136V33H141V32H145V31H149V30H153V29H157V28H163V27H181V28H190V29H193V13H194V10H195V8H196V5H198V8H199V10H200V13H201V29H203V30H205V29H219V28H228V27H243V28H249V29H254V30H258V31H262V32H266V33H270V34H276V35H296V34H304V33H317V32H320V40Z"/><rect class="tower-glow" x="195" y="17" width="4" height="5"/><rect class="tower-window" x="196" y="18" width="2" height="3"/></svg>
+    <div class="horizon-mist-wrap mist-low" data-speed="0.16" data-mouse="12"><div class="horizon-mist"></div></div>
+    <svg class="horizon-layer h-near" data-speed="0.08" data-mouse="16" viewBox="0 0 320 40" preserveAspectRatio="xMidYMax slice"><path d="M0 40V35H1V34H11V32H12V30H13V28H14V25H15V28H16V30H17V32H18V36H20V33H21V31H22V28H23V31H24V33H25V36H31V35H35V36H39V37H54V34H55V32H56V30H57V28H58V25H59V28H60V30H61V32H62V34H63V36H64V33H65V31H66V28H67V31H68V33H69V37H78V36H82V35H85V34H96V35H101V36H107V35H110V32H111V30H112V27H113V30H114V32H115V35H121V36H124V37H143V36H145V37H163V36H166V35H170V34H176V35H184V36H185V35H192V34H202V35H205V36H208V37H222V36H227V37H247V36H249V32H250V30H251V28H252V25H253V28H254V30H255V32H256V35H260V33H261V31H262V28H263V31H264V33H265V36H269V35H274V34H286V35H289V36H293V34H294V32H295V30H296V28H297V25H298V28H299V30H300V32H301V34H302V36H306V33H307V31H308V28H309V31H310V33H311V36H312V37H320V40Z"/></svg>
   </div>
   <div class="container">
     <div class="moon moon-xl" aria-hidden="true"></div>

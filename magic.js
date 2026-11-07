@@ -210,34 +210,95 @@
     };
   })();
 
-  /* ---------- Scroll-driven effects (one rAF per frame) ---------- */
-  var layers = Array.prototype.slice.call(document.querySelectorAll('.star-layer'));
-  var ticking = false;
+  /* =====================================================================
+     Depth parallax: scroll + mouse move every layer by its own distance
+     ===================================================================== */
+  function nodes(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+  var starLayers = nodes('.star-layer').map(function (el) {
+    return { el: el, depth: parseFloat(el.getAttribute('data-depth')) || 0 };
+  });
+  var horizonLayers = nodes('.horizon [data-speed]').map(function (el) {
+    return { el: el, speed: parseFloat(el.getAttribute('data-speed')) || 0, mouse: parseFloat(el.getAttribute('data-mouse')) || 0 };
+  });
+  var motes = document.querySelector('.motes');
+  var contact = document.getElementById('contact');
+  var footer = document.querySelector('.site-footer');
 
-  function onScrollFrame() {
-    ticking = false;
+  // Mouse position, -1..1 from the centre of the window, eased for a weighty feel
+  var mouse = { tx: 0, ty: 0, x: 0, y: 0 };
+  var useMotion = !reducedMotion.matches;
+
+  function applyDepth() {
     var y = window.scrollY || window.pageYOffset;
-    var max = root.scrollHeight - window.innerHeight;
+    var h = window.innerHeight;
 
-    if (mana) mana.setProgress(max > 0 ? Math.min(1, Math.max(0, y / max)) : 0);
+    // Stars: drift with scroll at their depth (wrapping seamlessly), and lean with the mouse
+    for (var i = 0; i < starLayers.length; i++) {
+      var d = starLayers[i].depth;
+      var sx = mouse.x * d * 120;
+      var sy = -((y * d) % h) + mouse.y * d * 70;
+      starLayers[i].el.style.transform = 'translate3d(' + sx.toFixed(1) + 'px,' + sy.toFixed(1) + 'px,0)';
+    }
 
-    // Starfield depth: each layer drifts at its own speed and wraps seamlessly
-    if (!reducedMotion.matches) {
-      var h = window.innerHeight;
-      for (var i = 0; i < layers.length; i++) {
-        var depth = parseFloat(layers[i].getAttribute('data-depth')) || 0;
-        var offset = (y * depth) % h;
-        layers[i].style.transform = 'translate3d(0,' + (-offset).toFixed(1) + 'px,0)';
+    // Motes are in front of the page, so they move faster than it does
+    if (motes) {
+      var my = -((y * 1.25) % h) + mouse.y * 26;
+      motes.style.transform = 'translate3d(' + (mouse.x * 40).toFixed(1) + 'px,' + my.toFixed(1) + 'px,0)';
+    }
+
+    // Horizon: farther layers lag behind the scroll; all settle into place at the bottom of the page
+    if (horizonLayers.length && contact) {
+      var r = contact.getBoundingClientRect();
+      if (r.top < h * 1.5) {
+        var t = Math.max(0, r.bottom + (footer ? footer.offsetHeight : 0) - h);
+        for (var k = 0; k < horizonLayers.length; k++) {
+          var L = horizonLayers[k];
+          L.el.style.transform = 'translate3d(' + (mouse.x * L.mouse).toFixed(1) + 'px,' + (t * L.speed).toFixed(1) + 'px,0)';
+        }
       }
     }
   }
 
+  /* ---------- Scroll: mana bar + depth, once per frame ---------- */
+  var ticking = false;
+  function onScrollFrame() {
+    ticking = false;
+    var y = window.scrollY || window.pageYOffset;
+    var max = root.scrollHeight - window.innerHeight;
+    if (mana) mana.setProgress(max > 0 ? Math.min(1, Math.max(0, y / max)) : 0);
+    if (useMotion) applyDepth();
+  }
   function requestFrame() {
     if (!ticking) { ticking = true; window.requestAnimationFrame(onScrollFrame); }
   }
   window.addEventListener('scroll', requestFrame, { passive: true });
   window.addEventListener('resize', requestFrame);
   onScrollFrame();
+
+  /* ---------- Mouse parallax (desktop only) ---------- */
+  var mouseLoop = false;
+  function mouseFrame() {
+    mouse.x += (mouse.tx - mouse.x) * 0.06;
+    mouse.y += (mouse.ty - mouse.y) * 0.06;
+    applyDepth();
+    if (Math.abs(mouse.tx - mouse.x) > 0.0005 || Math.abs(mouse.ty - mouse.y) > 0.0005) {
+      window.requestAnimationFrame(mouseFrame);
+    } else {
+      mouseLoop = false;
+    }
+  }
+  function kickMouse() {
+    if (!mouseLoop) { mouseLoop = true; window.requestAnimationFrame(mouseFrame); }
+  }
+  if (useMotion && canHover.matches) {
+    window.addEventListener('pointermove', function (e) {
+      mouse.tx = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouse.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+      kickMouse();
+    }, { passive: true });
+    // Drift back to centre when the mouse leaves the window
+    document.addEventListener('mouseleave', function () { mouse.tx = 0; mouse.ty = 0; kickMouse(); });
+  }
 
   /* ---------- Materialize on scroll ---------- */
   var revealEls = document.querySelectorAll('[data-reveal]');

@@ -22,6 +22,7 @@
   --content: 1200px;
   --section-y: clamp(64px, 7.5vw, 104px);
   --header-h: 76px;
+  --horizon-h: clamp(150px, 16vw, 240px);
 
   --line: rgba(154, 168, 177, 0.14);
   --card-bg: rgba(22, 25, 41, 0.62);
@@ -326,7 +327,7 @@ h3 { font-weight: 700; font-size: 21px; }
 }
 
 /* ---------- Contact ---------- */
-.contact { padding-top: clamp(88px, 10vw, 136px); padding-bottom: clamp(88px, 10vw, 136px); }
+.contact { padding-top: clamp(88px, 10vw, 136px); padding-bottom: calc(clamp(88px, 10vw, 136px) + var(--horizon-h) * 0.7); }
 .contact .container { max-width: calc(760px + var(--gutter) * 2); text-align: center; }
 .contact .container > :not(.moon) { position: relative; }
 .contact .eyebrow { margin-bottom: 16px; }
@@ -334,7 +335,8 @@ h3 { font-weight: 700; font-size: 21px; }
 .contact .lede { font-size: clamp(17px, 0.4vw + 15px, 19px); margin: 0 0 36px; }
 
 /* ---------- Footer ---------- */
-.site-footer { border-top: 1px solid var(--line); padding: 36px 0; }
+/* The footer is the dark ground the horizon's pine ridge stands on */
+.site-footer { background: #0F1220; padding: 36px 0; }
 .footer-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px 32px; }
 .footer-brand { display: flex; align-items: center; gap: 14px; font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--white); }
 .footer-brand img { width: 40px; height: 40px; }
@@ -842,6 +844,96 @@ html:has(.contact-modal[open]) { overflow: hidden; }
   .constellation { display: none; }
   .card::after, .code-card::after { display: none; }
   .void-art img { animation: none; }
+}
+
+/* =====================================================================
+   Depth: star layers, foreground motes, pixel horizon
+   ===================================================================== */
+
+/* Atmospheric perspective: far stars small, dim and blue; near stars big, bright, glowing */
+.layer-far { opacity: .55; }
+.layer-far .field-b { width: 2px; height: 2px; }
+.layer-mid { opacity: .85; }
+.layer-near { filter: drop-shadow(0 0 3px rgba(255, 246, 204, 0.55)); }
+
+/* ---------- Foreground motes ---------- */
+.motes { position: fixed; inset: 0; z-index: 5; pointer-events: none; will-change: transform; }
+.mote-set { position: absolute; inset: 0; }
+.mote-set-copy { top: 100vh; bottom: -100vh; }
+.mote {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  opacity: var(--o);
+  background: radial-gradient(circle, rgba(255, 246, 204, 0.95) 0%, rgba(234, 216, 134, 0.45) 35%, rgba(234, 216, 134, 0) 70%);
+  filter: blur(2px);
+  animation: mote-drift var(--d) ease-in-out infinite alternate, mote-breathe 7s ease-in-out infinite;
+}
+.mote-blue { background: radial-gradient(circle, rgba(220, 240, 255, 0.95) 0%, rgba(154, 168, 177, 0.45) 35%, rgba(154, 168, 177, 0) 70%); }
+.mote:nth-child(2n) { animation-delay: -11s, -3s; }
+.mote:nth-child(3n) { animation-delay: -23s, -5s; }
+@keyframes mote-drift { from { translate: 0 0; } to { translate: var(--dx) var(--dy); } }
+@keyframes mote-breathe { 0%, 100% { scale: 1; } 50% { scale: 1.25; } }
+@media (max-width: 700px) { .mote:nth-child(n+5) { display: none; } }
+
+/* ---------- Pixel horizon at the bottom of the page ---------- */
+.horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--horizon-h);
+  pointer-events: none;
+  overflow: hidden;  /* layers that lag downward never lengthen the page */
+}
+/* Slightly wider than the screen so mouse parallax never shows a gap at the edges */
+.horizon-layer {
+  position: absolute;
+  left: -24px;
+  bottom: 0;
+  width: calc(100% + 48px);
+  height: 100%;
+  shape-rendering: crispEdges;
+  will-change: transform;
+}
+/* Atmospheric perspective again: far mountains hazy and blue, near ridge darkest */
+.h-far path { fill: #2A3656; }
+.h-mid path { fill: #181E31; }
+.h-near path { fill: #0F1220; }
+.tower-window { fill: #EAD886; animation: window-flicker 5s steps(1) infinite; }
+.tower-glow { fill: rgba(234, 216, 134, 0.22); animation: window-flicker 5s steps(1) infinite; }
+
+/* Mist bands that drift slowly between the layers */
+.horizon-mist-wrap { position: absolute; left: -24px; right: -24px; height: 30%; overflow: hidden; will-change: transform; }
+.mist-high { bottom: 38%; }
+.mist-low { bottom: 12%; height: 24%; }
+.horizon-mist {
+  width: 200%;
+  height: 100%;
+  background-image:
+    radial-gradient(ellipse 18% 55% at 15% 55%, rgba(154, 168, 177, 0.16), transparent 70%),
+    radial-gradient(ellipse 22% 45% at 48% 45%, rgba(154, 168, 177, 0.11), transparent 70%),
+    radial-gradient(ellipse 16% 60% at 80% 60%, rgba(154, 168, 177, 0.14), transparent 70%);
+  background-size: 50% 100%;
+  background-repeat: repeat-x;
+  animation: mist-drift 90s linear infinite;
+}
+.mist-low .horizon-mist { animation-duration: 65s; animation-direction: reverse; opacity: .8; }
+
+@keyframes mist-drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes window-flicker {
+  0%, 100% { opacity: 1; }
+  42% { opacity: .75; }
+  44% { opacity: 1; }
+  71% { opacity: .85; }
+  73% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mote, .horizon-mist, .tower-window, .tower-glow { animation: none; }
 }
 
 /* ---------- Reduced motion ---------- */
