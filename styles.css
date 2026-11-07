@@ -311,7 +311,6 @@ h3 { font-weight: 700; font-size: 21px; }
 .contact .eyebrow { margin-bottom: 16px; }
 .contact h2 { font-size: clamp(30px, 2.4vw + 16px, 44px); line-height: 1.12; margin-bottom: 20px; }
 .contact .lede { font-size: clamp(17px, 0.4vw + 15px, 19px); margin: 0 0 36px; }
-.contact .alt { margin: 20px 0 0; font-size: 16px; color: var(--moon); overflow-wrap: anywhere; }
 
 /* ---------- Footer ---------- */
 .site-footer { border-top: 1px solid var(--line); padding: 36px 0; }
@@ -333,7 +332,10 @@ h3 { font-weight: 700; font-size: 21px; }
   line-height: 1.2;
   text-decoration: none;
   white-space: nowrap;
+  border: 0;
   border-radius: 2px;
+  -webkit-appearance: none;
+  appearance: none;
   cursor: pointer;
   transition: transform .2s ease, box-shadow .3s ease, background-color .3s ease, color .3s ease, border-color .3s ease;
 }
@@ -494,6 +496,159 @@ h3 { font-weight: 700; font-size: 21px; }
 @keyframes sparkle-up { 0% { opacity: 0; transform: translateY(6px) scale(.5); } 35% { opacity: 1; } 100% { opacity: 0; transform: translateY(-8px) scale(1); } }
 @keyframes sparkle-down { 0% { opacity: 0; transform: translateY(-6px) scale(.5); } 35% { opacity: 1; } 100% { opacity: 0; transform: translateY(8px) scale(1); } }
 
+/* =====================================================================
+   Contact modal
+   ===================================================================== */
+html:has(.contact-modal[open]) { overflow: hidden; }
+
+.contact-modal {
+  width: min(600px, calc(100vw - 32px));
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--mist);
+  overflow: visible;
+}
+.contact-modal::backdrop {
+  background: rgba(12, 14, 24, 0.74);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.contact-modal[open]::backdrop { animation: backdrop-in .35s ease both; }
+.contact-modal.is-closing::backdrop { animation: backdrop-out .24s ease both; }
+
+.modal-panel {
+  position: relative;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  padding: clamp(28px, 5vw, 44px);
+  background: linear-gradient(180deg, #252C43 0%, #1A1F31 100%);
+  border: 1px solid rgba(234, 216, 134, 0.35);
+  border-radius: 2px;
+  box-shadow: 0 0 40px rgba(234, 216, 134, 0.12), 0 0 90px rgba(94, 130, 156, 0.28), 0 30px 60px rgba(0, 0, 0, 0.45);
+}
+.contact-modal[open] .modal-panel { animation: summon .6s cubic-bezier(.2, .8, .2, 1) both; }
+.contact-modal.is-closing .modal-panel { animation: dismiss .24s ease-in both; }
+
+/* Summoning circle + sparks that burst out as the panel appears */
+.modal-magic { position: absolute; inset: 0; pointer-events: none; }
+.modal-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 115%;
+  aspect-ratio: 1 / 1;
+  border: 2px solid rgba(234, 216, 134, 0.7);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(.2);
+}
+.modal-ring-runes { width: 95%; border: 3px dashed rgba(94, 130, 156, 0.8); }
+.contact-modal[open] .modal-ring { animation: ring-burst .8s cubic-bezier(.2, .7, .3, 1) both; }
+.contact-modal[open] .modal-ring-runes { animation: rune-spin .9s cubic-bezier(.2, .7, .3, 1) .06s both; }
+
+.modal-spark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  shape-rendering: crispEdges;
+  transform: translate(-50%, -50%);
+}
+.contact-modal[open] .modal-spark { animation: spark-burst .9s cubic-bezier(.15, .7, .3, 1) both; }
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  color: var(--moon);
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease, transform .25s ease;
+}
+.modal-close:hover { color: var(--gold); border-color: rgba(234, 216, 134, 0.4); transform: rotate(90deg); }
+.modal-close:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+.contact-modal h2 { font-size: clamp(24px, 1.4vw + 17px, 32px); margin-bottom: 10px; padding-right: 44px; }
+.modal-lede { margin: 0 0 24px; font-size: 16px; color: var(--mist); }
+
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.field-full { grid-column: 1 / -1; }
+.form-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--white);
+}
+.form-field .optional { font-weight: 500; color: var(--moon); }
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font: inherit;
+  font-size: 16px;
+  color: var(--white);
+  background: rgba(22, 25, 41, 0.75);
+  border: 1px solid var(--card-border);
+  border-radius: 2px;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.form-field textarea { min-height: 140px; resize: vertical; }
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(234, 216, 134, 0.18), 0 0 18px rgba(234, 216, 134, 0.15);
+}
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.turnstile-slot:empty { display: none; }
+.form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 4px; }
+.form-status { margin: 0; font-size: 15px; color: var(--mist); }
+.form-status.is-error { color: #F2B98F; }
+.btn[disabled] { opacity: .75; cursor: progress; animation: none; transform: none; }
+
+.modal-success { text-align: center; padding: 16px 0 4px; }
+.modal-success h2 { padding-right: 0; outline: none; }
+.success-star { display: block; margin: 0 auto 20px; animation: float 6s ease-in-out infinite, twinkle 2.4s ease-in-out infinite; }
+
+@media (max-width: 520px) {
+  .form-grid { grid-template-columns: minmax(0, 1fr); }
+  .form-actions .btn { flex: 1 1 100%; text-align: center; }
+}
+
+@keyframes backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes backdrop-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes summon {
+  0% { opacity: 0; transform: translateY(18px) scale(.94); clip-path: circle(0% at 50% 50%); filter: brightness(1.8) saturate(.6); }
+  55% { opacity: 1; clip-path: circle(80% at 50% 50%); }
+  100% { opacity: 1; transform: none; clip-path: circle(150% at 50% 50%); filter: none; }
+}
+@keyframes dismiss { to { opacity: 0; transform: translateY(10px) scale(.96); filter: brightness(1.4); } }
+@keyframes ring-burst {
+  0% { opacity: .9; transform: translate(-50%, -50%) scale(.2); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.05); }
+}
+@keyframes rune-spin {
+  0% { opacity: .9; transform: translate(-50%, -50%) scale(.3) rotate(0deg); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1) rotate(120deg); }
+}
+@keyframes spark-burst {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1); }
+}
+
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -501,6 +656,10 @@ h3 { font-weight: 700; font-size: 21px; }
   .rise, .shoot { display: none; }
   .btn:hover, .btn:active, .lift:hover { transform: none; }
   .nav-link::after { transition: none; }
+  .modal-magic { display: none; }
+  .contact-modal[open] .modal-panel { animation: backdrop-in .2s ease both; }
+  .contact-modal.is-closing .modal-panel { animation: backdrop-out .15s ease both; }
+  .success-star { animation: none; }
 }
 
 /* ---------- Phones ---------- */
