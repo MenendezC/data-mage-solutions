@@ -29,30 +29,48 @@
   <symbol id="star" viewBox="0 0 5 5"><path d="M2 0h1v2h2v1H3v2H2V3H0V2h2z"/></symbol>
 </svg>
 
+<!-- One starfield behind the whole page -->
+<div class="starfield" aria-hidden="true">
+  <div class="field field-a"></div>
+  <div class="field field-b"></div>
+</div>
+
 <header class="site-header">
-  <div class="container">
-    <a class="brand" href="#top"><img src="assets/logo-wide-light.png" alt="Data Mage Solutions" width="251" height="64"></a>
+  <div class="container header-inner">
+    <a class="brand" href="#top"><img src="assets/logo-wide-light.png" alt="Data Mage Solutions" width="204" height="52"></a>
     <nav class="main-nav" aria-label="Main">
-      <a class="nav-link" href="#services">Services</a>
-      <a class="nav-link" href="#sql">SQL datasets</a>
-      <a class="nav-link" href="#process">How it works</a>
-      <a class="nav-link" href="#about">About</a>
+      <div class="nav-links">
+        <a class="nav-link" href="#services">Services</a>
+        <a class="nav-link" href="#sql">SQL datasets</a>
+        <a class="nav-link" href="#process">How it works</a>
+        <a class="nav-link" href="#about">About</a>
+      </div>
       <a class="btn btn-gold btn-sm" href="#contact">Get in touch</a>
+      <details class="nav-menu">
+        <summary aria-label="Menu">
+          <svg class="icon-open" aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" shape-rendering="crispEdges"><rect x="2" y="4" width="16" height="2"/><rect x="2" y="9" width="16" height="2"/><rect x="2" y="14" width="16" height="2"/></svg>
+          <svg class="icon-close" aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l12 12M16 4L4 16"/></svg>
+        </summary>
+        <div class="nav-menu-panel">
+          <a href="#services">Services</a>
+          <a href="#sql">SQL datasets</a>
+          <a href="#process">How it works</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </details>
     </nav>
   </div>
 </header>
 
 <main>
 
-<section id="top" class="section bg-hero">
+<section id="top" class="section hero">
   <div class="sky" aria-hidden="true">
-    <div class="field field-a"></div>
-    <div class="field field-b"></div>
     <div class="shoot"></div>
-    <svg class="spark" width="25" height="25" fill="#EAD886" style="top:64px; left:6%"><use href="#star"/></svg>
-    <svg class="spark" width="20" height="20" fill="#EAD886" style="bottom:80px; left:42%; animation-delay:-1.2s"><use href="#star"/></svg>
-    <svg class="spark" width="30" height="30" fill="#EAD886" style="top:110px; right:5%; animation-delay:-2.4s"><use href="#star"/></svg>
-    <svg class="spark" width="15" height="15" fill="#EAD886" style="top:46%; left:30%; animation-delay:-0.6s"><use href="#star"/></svg>
+    <svg class="spark" width="25" height="25" fill="#EAD886" style="top:48px; left:4%"><use href="#star"/></svg>
+    <svg class="spark" width="20" height="20" fill="#EAD886" style="bottom:20px; left:46%; animation-delay:-1.2s"><use href="#star"/></svg>
+    <svg class="spark" width="30" height="30" fill="#EAD886" style="top:96px; right:5%; animation-delay:-2.4s"><use href="#star"/></svg>
     <div class="rise" style="left:12%; animation-delay:-1s"></div>
     <div class="rise" style="left:27%; animation-delay:-6s; animation-duration:13s"></div>
     <div class="rise" style="left:55%; animation-delay:-3s; animation-duration:11s"></div>
@@ -71,14 +89,13 @@
     </div>
     <div class="hero-art">
       <div class="moon moon-lg" aria-hidden="true"></div>
-      <img class="float" src="assets/badge.png" alt="Data Mage Solutions badge" width="380" height="380">
+      <img class="float" src="assets/badge.png" alt="Data Mage Solutions badge" width="400" height="400">
     </div>
   </div>
 </section>
 
-<section id="services" class="section bg-services">
+<section id="services" class="section">
   <div class="sky" aria-hidden="true">
-    <div class="field field-b dim-60"></div>
     <svg class="spark" width="20" height="20" fill="#EAD886" style="top:72px; right:8%; animation-delay:-1.8s"><use href="#star"/></svg>
   </div>
   <div class="container">
@@ -112,9 +129,8 @@
   </div>
 </section>
 
-<section id="sql" class="section bg-ink">
+<section id="sql" class="section">
   <div class="sky" aria-hidden="true">
-    <div class="field field-a dim-50"></div>
     <div class="rise" style="left:8%; animation-delay:-2s; animation-duration:12s"></div>
     <div class="rise" style="left:48%; animation-delay:-7s"></div>
     <div class="rise" style="left:92%; animation-delay:-4s; animation-duration:13s"></div>
@@ -152,9 +168,8 @@
   </div>
 </section>
 
-<section id="process" class="section bg-process process">
+<section id="process" class="section process">
   <div class="sky" aria-hidden="true">
-    <div class="field field-a dim-45"></div>
     <svg class="spark" width="20" height="20" fill="#EAD886" style="top:64px; right:10%; animation-delay:-0.8s"><use href="#star"/></svg>
     <svg class="spark" width="15" height="15" fill="#EAD886" style="bottom:56px; left:6%; animation-delay:-2.2s"><use href="#star"/></svg>
   </div>
@@ -181,28 +196,25 @@
   </div>
 </section>
 
-<section id="about" class="section bg-about about">
-  <div class="sky" aria-hidden="true">
-    <div class="field field-b dim-50"></div>
-  </div>
+<section id="about" class="section about">
   <div class="container">
-    <div class="about-art">
-      <div class="moon moon-md" aria-hidden="true"></div>
-      <img class="float" src="assets/hat.png" alt="" width="260" height="260" style="animation-delay:-2s">
-    </div>
-    <div class="about-copy">
-      <p class="eyebrow">About</p>
-      <h2>Why the Data Mage?</h2>
-      <p>Most MSPs get BrightGauge running and then hit a wall: the metric they really want needs logic the standard gauges can't express. Getting past that wall is my specialty.</p>
-      <p>[YOUR INTRO: your name, how long you've worked with MSPs and BrightGauge, and what got you into data.]</p>
+    <div class="about-grid">
+      <div class="about-art">
+        <div class="moon moon-md" aria-hidden="true"></div>
+        <img class="float" src="assets/hat.png" alt="" width="260" height="260" style="animation-delay:-2s">
+      </div>
+      <div class="about-copy">
+        <p class="eyebrow">About</p>
+        <h2>Why the Data Mage?</h2>
+        <p>Most MSPs get BrightGauge running and then hit a wall: the metric they really want needs logic the standard gauges can't express. Getting past that wall is my specialty.</p>
+        <p>[YOUR INTRO: your name, how long you've worked with MSPs and BrightGauge, and what got you into data.]</p>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="contact" class="section bg-contact contact">
+<section id="contact" class="section contact">
   <div class="sky" aria-hidden="true">
-    <div class="field field-a"></div>
-    <div class="field field-b"></div>
     <div class="shoot" style="top:40px; animation-delay:-5s"></div>
     <div class="moon moon-xl"></div>
     <svg class="spark" width="25" height="25" fill="#EAD886" style="top:56px; left:12%"><use href="#star"/></svg>
@@ -224,9 +236,9 @@
 </main>
 
 <footer class="site-footer">
-  <div class="container">
+  <div class="container footer-inner">
     <div class="footer-brand">
-      <img src="assets/hat.png" alt="" width="44" height="44">
+      <img src="assets/hat.png" alt="" width="40" height="40">
       <span>Data Mage Solutions</span>
     </div>
     <nav class="footer-nav" aria-label="Footer">
@@ -239,5 +251,11 @@
   </div>
 </footer>
 
+<script>
+  // Close the mobile menu after picking a link
+  document.querySelectorAll('.nav-menu-panel a').forEach(function (link) {
+    link.addEventListener('click', function () { link.closest('details').removeAttribute('open'); });
+  });
+</script>
 </body>
 </html>
