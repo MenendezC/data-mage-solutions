@@ -307,6 +307,7 @@ h3 { font-weight: 700; font-size: 21px; }
 /* ---------- Contact ---------- */
 .contact { padding-top: clamp(88px, 10vw, 136px); padding-bottom: clamp(88px, 10vw, 136px); }
 .contact .container { max-width: calc(760px + var(--gutter) * 2); text-align: center; }
+.contact .container > :not(.moon) { position: relative; }
 .contact .eyebrow { margin-bottom: 16px; }
 .contact h2 { font-size: clamp(30px, 2.4vw + 16px, 44px); line-height: 1.12; margin-bottom: 20px; }
 .contact .lede { font-size: clamp(17px, 0.4vw + 15px, 19px); margin: 0 0 36px; }
