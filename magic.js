@@ -316,6 +316,25 @@
     revealEls.forEach(function (el) { io.observe(el); });
   }
 
+  /* ---------- Secret: three quick clicks on the logo's hat opens Spellstorm ---------- */
+  var hat = document.querySelector('.brand-hat');
+  if (hat) {
+    var clicks = [];
+    hat.addEventListener('click', function (e) {
+      var now = Date.now();
+      clicks = clicks.filter(function (t) { return now - t < 900; });
+      clicks.push(now);
+      if (clicks.length < 3) return;
+      e.preventDefault();
+      clicks = [];
+      if (window.Spellstorm) { window.Spellstorm.open(hat); return; }
+      var s = document.createElement('script');
+      s.src = '/game.js';
+      s.onload = function () { if (window.Spellstorm) window.Spellstorm.open(hat); };
+      document.body.appendChild(s);
+    });
+  }
+
   /* ---------- Cursor spotlight on cards (mouse only) ---------- */
   if (canHover.matches) {
     document.querySelectorAll('.spotlight').forEach(function (card) {

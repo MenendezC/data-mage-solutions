@@ -137,8 +137,28 @@ h3 { font-weight: 700; font-size: 21px; }
   justify-content: space-between;
   gap: 24px;
 }
-.brand { display: flex; align-items: center; flex: none; }
-.brand img { height: clamp(40px, 3vw + 18px, 52px); width: auto; }
+.brand { display: flex; align-items: center; flex: none; position: relative; }
+.brand img:not(.brand-hat) { height: clamp(40px, 3vw + 18px, 52px); width: auto; }
+/* The hat, cut out of the logo and laid exactly over it, so it alone can glow.
+   Its box is 186,1 138x150 within the 600x153 logo. */
+.brand-hat {
+  position: absolute;
+  left: 31%;
+  top: 0.654%;
+  width: 23%;
+  height: auto;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: filter .45s ease;
+}
+.brand-hat:hover {
+  filter: brightness(1.12) drop-shadow(0 0 3px rgba(234, 216, 134, 0.75)) drop-shadow(0 0 10px rgba(95, 211, 234, 0.45));
+  animation: hat-glow 2.4s ease-in-out .45s infinite;
+}
+@keyframes hat-glow {
+  0%, 100% { filter: brightness(1.12) drop-shadow(0 0 3px rgba(234, 216, 134, 0.75)) drop-shadow(0 0 10px rgba(95, 211, 234, 0.45)); }
+  50% { filter: brightness(1.2) drop-shadow(0 0 5px rgba(234, 216, 134, 0.9)) drop-shadow(0 0 16px rgba(95, 211, 234, 0.6)); }
+}
 
 .main-nav { display: flex; align-items: center; gap: clamp(16px, 2.4vw, 36px); }
 .nav-links {
@@ -411,22 +431,61 @@ h3 { font-weight: 700; font-size: 21px; }
 .btn:hover::before { animation: sparkle-up 1.1s ease-out infinite; }
 .btn:hover::after { animation: sparkle-down 1.1s ease-out .35s infinite; }
 
-.nav-link { color: var(--mist); text-decoration: none; position: relative; transition: color .2s ease; }
+/* Nav links: the text catches a gold glow, a line of light spreads out from the
+   centre beneath it, and a pixel star pops in beside it like an RPG menu selector. */
+.nav-link {
+  color: var(--mist);
+  text-decoration: none;
+  position: relative;
+  transition: color .25s ease, text-shadow .25s ease;
+}
 .nav-link::after {
   content: "";
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -6px;
+  left: -4px;
+  right: -4px;
+  bottom: -7px;
   height: 2px;
-  background: repeating-linear-gradient(90deg, #EAD886 0 4px, rgba(234, 216, 134, 0) 4px 8px);
+  background: linear-gradient(90deg, rgba(234, 216, 134, 0), #EAD886 30%, #FFF6CC 50%, #EAD886 70%, rgba(234, 216, 134, 0));
+  box-shadow: 0 0 8px rgba(234, 216, 134, 0.55);
+  opacity: 0;
   transform: scaleX(0);
-  transform-origin: left;
-  transition: transform .35s steps(6);
+  transition: transform .4s cubic-bezier(.2, .8, .2, 1), opacity .25s ease;
 }
-.nav-link:hover { color: var(--white); }
-.nav-link:hover::after { transform: scaleX(1); }
-.nav-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+.nav-link::before {
+  content: "";
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  margin-top: -4.5px;
+  background: var(--gold);
+  /* the site's pixel plus-star */
+  clip-path: polygon(33.3% 0, 66.6% 0, 66.6% 33.3%, 100% 33.3%, 100% 66.6%, 66.6% 66.6%, 66.6% 100%, 33.3% 100%, 33.3% 66.6%, 0 66.6%, 0 33.3%, 33.3% 33.3%);
+  filter: drop-shadow(0 0 4px rgba(234, 216, 134, 0.8));
+  opacity: 0;
+  transform: scale(0) rotate(-90deg);
+  transition: transform .3s cubic-bezier(.3, 1.6, .5, 1), opacity .2s ease;
+}
+.nav-link:hover,
+.nav-link:focus-visible {
+  color: var(--gold);
+  text-shadow: 0 0 12px rgba(234, 216, 134, 0.45);
+}
+.nav-link:hover::after,
+.nav-link:focus-visible::after { opacity: 1; transform: scaleX(1); }
+.nav-link:hover::before,
+.nav-link:focus-visible::before {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  animation: selector-twinkle 1.6s ease-in-out .3s infinite;
+}
+.nav-link:focus-visible { outline: none; }
+@keyframes selector-twinkle {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 4px rgba(234, 216, 134, 0.8)); }
+  50% { opacity: .55; filter: drop-shadow(0 0 1px rgba(234, 216, 134, 0.3)); }
+}
 
 .lift { transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
 .lift:hover { transform: translateY(-4px); border-color: var(--gold); box-shadow: 0 0 32px rgba(234, 216, 134, 0.12); }
@@ -968,7 +1027,9 @@ label[for] {
   .field, .spark, .moon, .float, .btn, .btn:hover, .btn::before, .btn::after, .btn:hover::before, .btn:hover::after { animation: none; }
   .rise, .shoot { display: none; }
   .btn:hover, .btn:active, .lift:hover { transform: none; }
-  .nav-link::after { transition: none; }
+  .nav-link::after, .nav-link::before { transition: none; }
+  .nav-link:hover::before, .nav-link:focus-visible::before { animation: none; }
+  .brand-hat:hover { animation: none; }
   .modal-magic { display: none; }
   .contact-modal[open] .modal-panel { animation: backdrop-in .2s ease both; }
   .contact-modal.is-closing .modal-panel { animation: backdrop-out .15s ease both; }
