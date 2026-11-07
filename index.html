@@ -45,7 +45,7 @@
         <a class="nav-link" href="#process">How it works</a>
         <a class="nav-link" href="#about">About</a>
       </div>
-      <a class="btn btn-gold btn-sm" href="#contact">Get in touch</a>
+      <a class="btn btn-gold btn-sm" href="#contact" data-open-contact>Get in touch</a>
       <details class="nav-menu">
         <summary aria-label="Menu">
           <svg class="icon-open" aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" shape-rendering="crispEdges"><rect x="2" y="4" width="16" height="2"/><rect x="2" y="9" width="16" height="2"/><rect x="2" y="14" width="16" height="2"/></svg>
@@ -83,7 +83,7 @@
       <h1>Complex BrightGauge builds for MSPs that need real answers.</h1>
       <p class="lede">I design custom gauges, SQL datasets and client reports on top of your PSA, RMM and finance data. These are the builds that go past the standard library and get your team the numbers they actually run the business on.</p>
       <div class="button-row">
-        <a class="btn btn-gold btn-md" href="mailto:CNMenendez@data-mage-solutions.com">Email me about a project</a>
+        <a class="btn btn-gold btn-md" href="#contact" data-open-contact>Tell me about a project</a>
         <a class="btn btn-ghost btn-md" href="#services">See what I build</a>
       </div>
     </div>
@@ -179,7 +179,7 @@
     <div class="steps">
       <div class="step">
         <div class="step-num" aria-hidden="true">01</div>
-        <h3>Send me an email</h3>
+        <h3>Send me a message</h3>
         <p>Tell me what you're trying to measure and which systems feed BrightGauge. If it helps, we'll set up a short call to dig in.</p>
       </div>
       <div class="step">
@@ -227,9 +227,8 @@
     <div class="moon moon-xl" aria-hidden="true"></div>
     <p class="eyebrow">Get in touch</p>
     <h2>Have a metric you can't get out of BrightGauge?</h2>
-    <p class="lede">Send me an email with what you're trying to measure. If the data exists, I can build the gauge for it.</p>
-    <a class="btn btn-gold btn-lg" href="mailto:CNMenendez@data-mage-solutions.com">Email me</a>
-    <p class="alt">or write to <a href="mailto:CNMenendez@data-mage-solutions.com">CNMenendez@data-mage-solutions.com</a></p>
+    <p class="lede">Tell me what you're trying to measure. If the data exists, I can build the gauge for it.</p>
+    <a class="btn btn-gold btn-lg" href="#contact" data-open-contact>Send me a message</a>
   </div>
 </section>
 
@@ -245,11 +244,76 @@
       <a class="nav-link" href="#services">Services</a>
       <a class="nav-link" href="#process">How it works</a>
       <a class="nav-link" href="#about">About</a>
-      <a class="nav-link" href="mailto:CNMenendez@data-mage-solutions.com">CNMenendez@data-mage-solutions.com</a>
+      <a class="nav-link" href="#contact" data-open-contact>Contact</a>
     </nav>
     <p class="copyright">© 2026 Data Mage Solutions</p>
   </div>
 </footer>
+
+<dialog class="contact-modal" id="contact-modal" aria-labelledby="contact-title">
+  <div class="modal-magic" aria-hidden="true">
+    <span class="modal-ring"></span>
+    <span class="modal-ring modal-ring-runes"></span>
+    <svg class="modal-spark" width="18" height="18" fill="#EAD886" style="--x:-330px; --y:-250px"><use href="#star"/></svg>
+    <svg class="modal-spark" width="14" height="14" fill="#FFFFFF" style="--x:320px; --y:-270px; animation-delay:.05s"><use href="#star"/></svg>
+    <svg class="modal-spark" width="22" height="22" fill="#EAD886" style="--x:350px; --y:120px; animation-delay:.1s"><use href="#star"/></svg>
+    <svg class="modal-spark" width="14" height="14" fill="#D1D2D4" style="--x:-360px; --y:160px; animation-delay:.08s"><use href="#star"/></svg>
+    <svg class="modal-spark" width="18" height="18" fill="#EAD886" style="--x:-120px; --y:330px; animation-delay:.14s"><use href="#star"/></svg>
+    <svg class="modal-spark" width="12" height="12" fill="#FFFFFF" style="--x:150px; --y:340px; animation-delay:.12s"><use href="#star"/></svg>
+  </div>
+
+  <div class="modal-panel">
+    <button class="modal-close" type="button" aria-label="Close" data-close-contact>
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l12 12M16 4L4 16"/></svg>
+    </button>
+
+    <div data-view="form">
+      <p class="eyebrow">Send a message</p>
+      <h2 id="contact-title">What are you trying to measure?</h2>
+      <p class="modal-lede">Tell me about your BrightGauge setup and the numbers you're after. I'll reply by email.</p>
+
+      <form id="contact-form" class="form-grid" action="https://formspree.io/f/FORMSPREE_FORM_ID" method="POST">
+        <div class="form-field">
+          <label for="cf-name">Name</label>
+          <input id="cf-name" name="name" type="text" autocomplete="name" maxlength="120" required autofocus>
+        </div>
+        <div class="form-field">
+          <label for="cf-email">Email</label>
+          <input id="cf-email" name="email" type="email" autocomplete="email" maxlength="200" required>
+        </div>
+        <div class="form-field field-full">
+          <label for="cf-company">Company <span class="optional">(optional)</span></label>
+          <input id="cf-company" name="company" type="text" autocomplete="organization" maxlength="160">
+        </div>
+        <div class="form-field field-full">
+          <label for="cf-message">Message</label>
+          <textarea id="cf-message" name="message" rows="6" minlength="10" maxlength="5000" required></textarea>
+        </div>
+
+        <!-- Honeypot: hidden from people, irresistible to bots -->
+        <div class="hp" aria-hidden="true">
+          <label for="cf-website">Leave this empty</label>
+          <input id="cf-website" name="_gotcha" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <input type="hidden" name="_subject" value="New message from data-mage-solutions.com">
+
+        <div class="field-full turnstile-slot" id="turnstile"></div>
+
+        <div class="field-full form-actions">
+          <button class="btn btn-gold btn-md" type="submit">Send message</button>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-success" data-view="success" hidden>
+      <svg class="success-star" aria-hidden="true" width="56" height="56" fill="#EAD886" shape-rendering="crispEdges"><use href="#star"/></svg>
+      <h2 tabindex="-1">Message sent!</h2>
+      <p class="modal-lede">Thanks for reaching out. I'll get back to you by email soon.</p>
+      <button class="btn btn-ghost btn-md" type="button" data-close-contact>Close</button>
+    </div>
+  </div>
+</dialog>
 
 <script>
   // Close the mobile menu after picking a link
@@ -257,5 +321,6 @@
     link.addEventListener('click', function () { link.closest('details').removeAttribute('open'); });
   });
 </script>
+<script src="contact.js" defer></script>
 </body>
 </html>
