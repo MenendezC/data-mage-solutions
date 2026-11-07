@@ -11,8 +11,15 @@
 <meta property="og:title" content="Data Mage Solutions | BrightGauge consulting for MSPs">
 <meta property="og:description" content="Custom BrightGauge gauges, SQL datasets, dashboards and client reports for managed service providers.">
 <meta property="og:url" content="https://www.data-mage-solutions.com/">
-<meta property="og:image" content="https://www.data-mage-solutions.com/assets/badge.png">
+<meta property="og:site_name" content="Data Mage Solutions">
+<meta property="og:image" content="https://www.data-mage-solutions.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Data Mage Solutions: complex BrightGauge builds for MSPs that need real answers.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.data-mage-solutions.com/assets/og-image.png">
 <meta name="theme-color" content="#161929">
+<script>document.documentElement.classList.add('js');</script>
 
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
@@ -29,10 +36,21 @@
   <symbol id="star" viewBox="0 0 5 5"><path d="M2 0h1v2h2v1H3v2H2V3H0V2h2z"/></symbol>
 </svg>
 
-<!-- One starfield behind the whole page -->
+<!-- One starfield behind the whole page: three depth layers that drift at
+     different speeds as you scroll, plus constellations that draw themselves -->
 <div class="starfield" aria-hidden="true">
-  <div class="field field-a"></div>
-  <div class="field field-b"></div>
+  <div class="star-layer" data-depth="0.04"><div class="field field-b"></div><div class="field field-b field-copy"></div></div>
+  <div class="star-layer" data-depth="0.1"><div class="field field-a"></div><div class="field field-a field-copy"></div></div>
+  <div class="star-layer" data-depth="0.2"><div class="field field-c"></div><div class="field field-c field-copy"></div></div>
+  <svg class="constellation constellation-chart" viewBox="0 0 200 120" width="190" height="114">
+    <path pathLength="1" d="M10 100 L55 78 L95 88 L140 45 L190 18"/>
+    <g><rect x="8" y="98" width="4" height="4"/><rect x="53" y="76" width="4" height="4"/><rect x="93" y="86" width="4" height="4"/><rect x="138" y="43" width="4" height="4"/><rect x="187" y="15" width="6" height="6"/></g>
+  </svg>
+  <svg class="constellation constellation-gauge" viewBox="0 0 200 120" width="190" height="114">
+    <path pathLength="1" d="M20 100 A80 80 0 0 1 180 100"/>
+    <path pathLength="1" d="M100 100 L148 54"/>
+    <g><rect x="18" y="98" width="4" height="4"/><rect x="41" y="41" width="4" height="4"/><rect x="98" y="18" width="4" height="4"/><rect x="155" y="41" width="4" height="4"/><rect x="178" y="98" width="4" height="4"/><rect x="97" y="97" width="6" height="6"/><rect x="146" y="52" width="4" height="4"/></g>
+  </svg>
 </div>
 
 <header class="site-header">
@@ -61,6 +79,7 @@
       </details>
     </nav>
   </div>
+  <div class="mana-bar" aria-hidden="true"><canvas class="mana-canvas"></canvas></div>
 </header>
 
 <main>
@@ -78,7 +97,7 @@
     <div class="rise" style="left:88%; animation-delay:-4.5s; animation-duration:14s"></div>
   </div>
   <div class="container hero-grid">
-    <div class="hero-copy">
+    <div class="hero-copy" data-reveal>
       <p class="eyebrow">BrightGauge consulting for MSPs</p>
       <h1>Complex BrightGauge builds for MSPs that need real answers.</h1>
       <p class="lede">I design custom gauges, SQL datasets and client reports on top of your PSA, RMM and finance data. These are the builds that go past the standard library and get your team the numbers they actually run the business on.</p>
@@ -87,9 +106,9 @@
         <a class="btn btn-ghost btn-md" href="#services">See what I build</a>
       </div>
     </div>
-    <div class="hero-art">
+    <div class="hero-art" data-reveal style="--i:2">
       <div class="moon moon-lg" aria-hidden="true"></div>
-      <img class="float" src="assets/badge.png" alt="Data Mage Solutions badge" width="400" height="400">
+      <img class="float" src="assets/badge.png" alt="Data Mage Solutions badge" width="400" height="400" fetchpriority="high">
     </div>
   </div>
 </section>
@@ -99,28 +118,28 @@
     <svg class="spark" width="20" height="20" fill="#EAD886" style="top:72px; right:8%; animation-delay:-1.8s"><use href="#star"/></svg>
   </div>
   <div class="container">
-    <div class="section-intro">
+    <div class="section-intro" data-reveal>
       <p class="eyebrow">What I build</p>
       <h2>From one tricky gauge to a full reporting overhaul.</h2>
       <p class="lede">Every project starts with a question your team can't answer today. I build whatever it takes to answer it inside BrightGauge.</p>
     </div>
     <div class="card-grid">
-      <article class="card lift">
+      <article class="card lift spotlight" data-reveal style="--i:0">
         <div class="icon-tile"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#EAD886" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4-5"/><path d="M4 20h16"/></svg></div>
         <h3>Complex gauge builds</h3>
         <p>Multi-condition filters, calculated fields, goal lines and drill-downs. Each gauge answers one question clearly, even when the logic behind it isn't simple.</p>
       </article>
-      <article class="card lift">
+      <article class="card lift spotlight" data-reveal style="--i:1">
         <div class="icon-tile"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#EAD886" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg></div>
         <h3>Custom SQL datasets</h3>
         <p>When the default datasets don't join what you need, I write SQL datasets that bring agreements, time entries, tickets and invoices together in one clean source.</p>
       </article>
-      <article class="card lift">
+      <article class="card lift spotlight" data-reveal style="--i:2">
         <div class="icon-tile"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#EAD886" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 9h18"/><path d="M9 9v11"/></svg></div>
         <h3>Dashboards and client reports</h3>
         <p>Ops dashboards for the NOC wall, views for service managers and owners, and QBR reports your clients will actually read.</p>
       </article>
-      <article class="card lift">
+      <article class="card lift spotlight" data-reveal style="--i:3">
         <div class="icon-tile"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#EAD886" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 15 9"/><path d="M17 3v4"/><path d="M15 5h4"/><path d="M20 11v3"/><path d="M18.5 12.5h3"/></svg></div>
         <h3>Audits, cleanup and training</h3>
         <p>I untangle accounts full of duplicate gauges and broken filters, then show your team how to keep things tidy.</p>
@@ -136,7 +155,7 @@
     <div class="rise" style="left:92%; animation-delay:-4s; animation-duration:13s"></div>
   </div>
   <div class="container split">
-    <div>
+    <div data-reveal>
       <p class="eyebrow">Custom SQL datasets</p>
       <h2>When the answer lives in three different tables, I join them.</h2>
       <p class="lede">BrightGauge's built-in datasets cover the common metrics. The questions behind margin and client retention usually need custom SQL. That's where I spend most of my time. Questions like:</p>
@@ -147,7 +166,7 @@
         <li><svg aria-hidden="true" width="15" height="15" fill="#EAD886" shape-rendering="crispEdges"><use href="#star"/></svg>How many tickets reopen within seven days of closing?</li>
       </ul>
     </div>
-    <div class="code-card lift">
+    <div class="code-card lift spotlight" data-reveal style="--i:2">
       <div class="code-bar">
         <span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
         <span class="file">agreement_overage.sql</span>
@@ -174,20 +193,22 @@
     <svg class="spark" width="15" height="15" fill="#EAD886" style="bottom:56px; left:6%; animation-delay:-2.2s"><use href="#star"/></svg>
   </div>
   <div class="container">
-    <p class="eyebrow">How it works</p>
-    <h2>From a messy question to a gauge you can trust.</h2>
+    <div data-reveal>
+      <p class="eyebrow">How it works</p>
+      <h2>From a messy question to a gauge you can trust.</h2>
+    </div>
     <div class="steps">
-      <div class="step">
+      <div class="step" data-reveal style="--i:1">
         <div class="step-num" aria-hidden="true">01</div>
         <h3>Send me a message</h3>
         <p>Tell me what you're trying to measure and which systems feed BrightGauge. If it helps, we'll set up a short call to dig in.</p>
       </div>
-      <div class="step">
+      <div class="step" data-reveal style="--i:2">
         <div class="step-num" aria-hidden="true">02</div>
         <h3>Build and validate</h3>
         <p>I build the datasets, gauges and dashboards, then check every number against your PSA so you know it's right.</p>
       </div>
-      <div class="step">
+      <div class="step" data-reveal style="--i:3">
         <div class="step-num" aria-hidden="true">03</div>
         <h3>Hand off and train</h3>
         <p>You get documentation for every custom build and a walkthrough so your team can maintain and extend it.</p>
@@ -199,11 +220,11 @@
 <section id="about" class="section about">
   <div class="container">
     <div class="about-grid">
-      <div class="about-art">
+      <div class="about-art" data-reveal>
         <div class="moon moon-md" aria-hidden="true"></div>
-        <img class="float" src="assets/hat.png" alt="" width="260" height="260" style="animation-delay:-2s">
+        <img class="float" src="assets/hat.png" alt="" width="260" height="260" loading="lazy" style="animation-delay:-2s">
       </div>
-      <div class="about-copy">
+      <div class="about-copy" data-reveal style="--i:2">
         <p class="eyebrow">About</p>
         <h2>Why the Data Mage?</h2>
         <p>Most MSPs get BrightGauge running and then hit a wall: the metric they really want needs logic the standard gauges can't express. Getting past that wall is my specialty.</p>
@@ -225,10 +246,14 @@
   </div>
   <div class="container">
     <div class="moon moon-xl" aria-hidden="true"></div>
-    <p class="eyebrow">Get in touch</p>
-    <h2>Have a metric you can't get out of BrightGauge?</h2>
-    <p class="lede">Tell me what you're trying to measure. If the data exists, I can build the gauge for it.</p>
-    <a class="btn btn-gold btn-lg" href="#contact" data-open-contact>Send me a message</a>
+    <div data-reveal>
+      <p class="eyebrow">Get in touch</p>
+      <h2>Have a metric you can't get out of BrightGauge?</h2>
+      <p class="lede">Tell me what you're trying to measure. If the data exists, I can build the gauge for it.</p>
+    </div>
+    <div data-reveal style="--i:2">
+      <a class="btn btn-gold btn-lg" href="#contact" data-open-contact>Send me a message</a>
+    </div>
   </div>
 </section>
 
@@ -237,7 +262,7 @@
 <footer class="site-footer">
   <div class="container footer-inner">
     <div class="footer-brand">
-      <img src="assets/hat.png" alt="" width="40" height="40">
+      <img src="assets/hat.png" alt="" width="40" height="40" loading="lazy">
       <span>Data Mage Solutions</span>
     </div>
     <nav class="footer-nav" aria-label="Footer">
@@ -321,6 +346,7 @@
     link.addEventListener('click', function () { link.closest('details').removeAttribute('open'); });
   });
 </script>
+<script src="magic.js" defer></script>
 <script src="contact.js" defer></script>
 </body>
 </html>

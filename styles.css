@@ -30,7 +30,29 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); }
+html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); scrollbar-gutter: stable; }
+
+/* ---------- Scrollbar ----------
+   Deliberately faint so it doesn't compete with the mana bar: a thin,
+   translucent moonlit sliver on an invisible track. It brightens a little
+   on hover so it's still easy to grab. */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 2px;
+  background-clip: padding-box;
+  background-color: rgba(154, 168, 177, 0.16);
+}
+::-webkit-scrollbar-thumb:hover { background-color: rgba(154, 168, 177, 0.32); }
+::-webkit-scrollbar-thumb:active { background-color: rgba(234, 216, 134, 0.4); }
+::-webkit-scrollbar-corner { background: transparent; }
+
+/* Firefox only understands the simple version. Setting these in Chrome would
+   switch off the styling above, so they're limited to Firefox. */
+@supports not selector(::-webkit-scrollbar) {
+  html { scrollbar-color: rgba(154, 168, 177, 0.25) transparent; scrollbar-width: thin; }
+}
 
 /* One continuous night-sky gradient for the whole page.
    Sections are transparent, so there are no seams between them. */
@@ -73,7 +95,7 @@ a:hover { color: var(--white); }
 }
 
 /* ---------- Fixed starfield behind everything ---------- */
-.starfield { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+.starfield { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
 .site-header { z-index: 20; }
 main, .site-footer { position: relative; z-index: 1; }
 main { overflow-x: clip; }
@@ -245,7 +267,6 @@ h3 { font-weight: 700; font-size: 21px; }
   background: rgba(34, 40, 61, 0.82);
   border: 1px solid var(--card-border);
   border-radius: 2px;
-  overflow: hidden;
   box-shadow: 0 0 60px rgba(94, 130, 156, 0.18);
 }
 .code-bar { display: flex; align-items: center; gap: 8px; padding: 14px 20px; border-bottom: 1px solid var(--card-border); }
@@ -647,6 +668,180 @@ html:has(.contact-modal[open]) { overflow: hidden; }
   0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
   25% { opacity: 1; }
   100% { opacity: 0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1); }
+}
+
+/* =====================================================================
+   Magic & motion, part 2
+   ===================================================================== */
+
+/* ---------- Mana bar: a pixel-art potion vial under the header ----------
+   Styled after classic pixel-art potions. One "art pixel" = 2px.
+   - Glass: a faint light outline with two fixed white glare pixels.
+   - Liquid: cyan-teal bands that follow a wavy surface (not straight stripes).
+   - Motion: the wave rolls slowly in 100ms steps (10 fps, like a sprite
+     animation), and a few square bubbles drift up. Nothing sweeps or flashes. */
+/* Sits along the bottom edge of the header and is fully transparent when empty,
+   so on landing you just see the header. The bottom 10px holds the liquid;
+   the space above it is where bubbles fizz up into the header. */
+.mana-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 32px;
+  pointer-events: none;
+}
+/* The liquid itself is drawn live on this canvas by magic.js */
+.mana-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: drop-shadow(0 0 3px rgba(79, 198, 222, 0.45));
+}
+
+/* ---------- Starfield depth layers ---------- */
+.star-layer { position: absolute; inset: 0; will-change: transform; }
+.field-copy { top: 100vh; }
+.field-c {
+  width: 4px;
+  height: 4px;
+  animation-duration: 4.4s;
+  animation-delay: -1.5s;
+  box-shadow: 9vw 22vh #FFFFFF, 23vw 67vh #EAD886, 41vw 12vh #FFFFFF, 57vw 44vh #EAD886,
+    69vw 81vh #FFFFFF, 83vw 15vh #EAD886, 95vw 52vh #FFFFFF, 31vw 91vh #EAD886,
+    4vw 58vh #FFFFFF, 76vw 33vh #FFFFFF;
+}
+
+/* Constellations that draw themselves now and then: a rising chart and a gauge */
+.constellation { position: absolute; opacity: 0; overflow: visible; animation: constellation 26s ease-in-out infinite; }
+.constellation path {
+  fill: none;
+  stroke: rgba(234, 216, 134, 0.75);
+  stroke-width: 1;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: c-draw 26s ease-in-out infinite;
+}
+.constellation rect { fill: #FFF6CC; }
+.constellation-chart { top: 24vh; left: 3vw; }
+.constellation-gauge { top: 66vh; right: 4vw; }
+.constellation-gauge,
+.constellation-gauge path { animation-delay: -13s; }
+@media (max-width: 1099px) { .constellation { display: none; } }
+
+@keyframes constellation { 0%, 4% { opacity: 0; } 10%, 36% { opacity: .45; } 46%, 100% { opacity: 0; } }
+@keyframes c-draw { 0%, 8% { stroke-dashoffset: 1; } 26%, 100% { stroke-dashoffset: 0; } }
+
+/* ---------- Materialize on scroll ----------
+   Uses the separate `translate` property so it never fights the hover lift (`transform`). */
+.js [data-reveal] {
+  opacity: 0;
+  translate: 0 28px;
+  filter: blur(6px);
+  transition-property: opacity, translate, filter, transform, border-color, box-shadow;
+  transition-duration: .8s, .9s, .8s, .25s, .25s, .25s;
+  transition-timing-function: ease, cubic-bezier(.2, .8, .2, 1), ease, ease, ease, ease;
+  transition-delay: calc(var(--i, 0) * 110ms), calc(var(--i, 0) * 110ms), calc(var(--i, 0) * 110ms), 0s, 0s, 0s;
+}
+.js [data-reveal].is-visible { opacity: 1; translate: none; filter: none; }
+
+/* A little sparkle burst as each card arrives */
+.card, .code-card { position: relative; }
+.card::after,
+.code-card::after {
+  content: "";
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  width: 4px;
+  height: 4px;
+  background: #EAD886;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: -12px 7px 0 #FFFFFF, 9px 11px 0 #EAD886, -5px -9px 0 #D1D2D4, 14px -6px 0 #9AA8B1;
+}
+.js .card.is-visible::after,
+.js .code-card.is-visible::after {
+  animation: reveal-spark 1.2s ease-out both;
+  animation-delay: calc(var(--i, 0) * 110ms + .45s);
+}
+@keyframes reveal-spark {
+  0% { opacity: 0; transform: scale(.3); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-6px) scale(1.6); }
+}
+
+/* ---------- Cursor spotlight: gold light follows the mouse along the border ---------- */
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 246, 204, 0.95), rgba(234, 216, 134, 0.5) 25%, transparent 60%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.spotlight:hover::before { opacity: 1; }
+.spotlight:hover {
+  background-image: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(234, 216, 134, 0.07), transparent 55%);
+}
+/* Let the spotlight do the gold, instead of lighting the whole border */
+.lift.spotlight:hover { border-color: var(--card-border); }
+
+/* =====================================================================
+   404 page
+   ===================================================================== */
+.void {
+  min-height: calc(100vh - var(--header-h));
+  display: flex;
+  align-items: center;
+  padding: clamp(48px, 8vw, 96px) 0;
+}
+.void .container { text-align: center; max-width: calc(720px + var(--gutter) * 2); position: relative; }
+.void-art {
+  position: relative;
+  width: min(220px, 50vw);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.void-art img { position: relative; width: 100%; animation: float 6s ease-in-out infinite, vanish 7s ease-in-out infinite; }
+.void-code {
+  margin: 0 0 12px;
+  font-family: var(--font-pixel);
+  font-size: clamp(64px, 10vw + 20px, 120px);
+  line-height: 1;
+  letter-spacing: .04em;
+  color: var(--gold);
+  text-shadow: 0 0 24px rgba(234, 216, 134, 0.35), 4px 4px 0 #2C334C;
+}
+.void h1 { font-size: clamp(30px, 2.6vw + 16px, 46px); margin-bottom: 16px; }
+.void .lede { margin: 0 auto 32px; max-width: 560px; }
+.void .button-row { justify-content: center; }
+@keyframes vanish {
+  0%, 70%, 100% { opacity: 1; filter: none; }
+  78% { opacity: .2; filter: blur(3px); }
+  84% { opacity: .9; filter: none; }
+  88% { opacity: .5; }
+  92% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] { opacity: 1; translate: none; filter: none; transition: none; }
+  .constellation { display: none; }
+  .card::after, .code-card::after { display: none; }
+  .void-art img { animation: none; }
 }
 
 /* ---------- Reduced motion ---------- */
