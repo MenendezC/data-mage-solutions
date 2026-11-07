@@ -5,9 +5,9 @@
 
   var CONFIG = {
     // Formspree form endpoint, e.g. https://formspree.io/f/abcdwxyz
-    formEndpoint: 'https://formspree.io/f/FORMSPREE_FORM_ID',
+    formEndpoint: 'https://formspree.io/f/mnppydlw',
     // Cloudflare Turnstile site key (public). Secret key goes in Formspree, never here.
-    turnstileSiteKey: 'TURNSTILE_SITE_KEY',
+    turnstileSiteKey: '0x4AAAAAAF3O-A8NVfoGn3DK',
     // Anything submitted faster than this after opening is treated as a bot.
     minFillMs: 3000
   };
